@@ -18,13 +18,13 @@ export default defineConfig({
           label: 'Gestion',
           items: [
             {
+              label: 'Guía para generación de documentos en MDX',
+              slug: 'gestion',
+            },
+            {
               label: 'Matriz de Decisión Rápida - Alta de Cliente',
               slug: 'gestion/matriz-decision-rapida-alta-de-cliente',
             },
-            { label: 'Conectarse a VPN', slug: 'gestion/vpn-connection' },
-            { label: 'Cambiar Contraseña', slug: 'gestion/change-password' },
-            { label: 'FAQ', slug: 'gestion/faq' },
-            { label: 'Tutoriales', slug: 'gestion/tutorials' },
           ],
         },
       ],

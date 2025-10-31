@@ -1,4 +1,44 @@
 ---
-title: Guías para Usuarios
-description: Documentación pública para usuarios del sistema
+title: Guías para generación de documentos
+description: Recopilación de guías y recursos para la generación de documentos.
 ---
+
+### Guías para generación de documentos
+
+Cómo generar docuementos para el repositorio.
+
+1. Los nuevos documentos deben ser creados dentro de la carpeta `src/content/docs`.
+2. Cada documento debe tener un archivo `.mdx` con el siguiente formato de encabezado:
+
+   ```mdx
+   ---
+   title: Título del Documento
+   description: Breve descripción del documento.
+   ---
+   ```
+
+3. Asegúrate de que el contenido del documento esté bien estructurado y sea fácil de leer.
+4. Utiliza encabezados, listas y otros elementos de formato para mejorar la legibilidad.
+   en el frontmatter del documento.
+5. Por defecto en Astro Starlight los documentos tienen un overview automático basado en los encabezados del documento. El mismo puede ser desactivado agregando la siguiente línea en el frontmatter:
+   ```
+   hideTableOfContents: true
+   ```
+6. Una vez creado el documento, actualiza el archivo `astro.config.mjs` para incluir el nuevo documento en la navegación del sitio web.
+   - Abre `astro.config.mjs`.
+   - Localiza la sección `nav` y agrega una nueva entrada para tu documento bajo la categoría correspondiente.
+   - Asegúrate de que el `slug` coincida con la ruta del nuevo documento.
+7. Guarda los cambios y verifica que el nuevo documento aparezca correctamente en la navegación del sitio web.
+8. Cuando los cambios esten listos, valida la sintaxis y estructura del documento antes de hacer un commit al repositorio. Esto lo puedes hacer ejecutando el comando
+   ```
+   npm run validate
+   ```
+   Si hay errores de lineteo puedes corregirlo con
+   ```
+   npm run lint:fix
+   ```
+   o con
+   ```
+   npm run format
+   ```
+9. Finalmente, haz un commit y push de tus cambios al repositorio. Aqui se ejecutaran pipelines de CI/CD para validar y desplegar los cambios automáticamente.
