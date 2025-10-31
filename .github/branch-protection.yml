@@ -1,0 +1,35 @@
+# Configuración recomendada para protección de ramas en GitHub
+# Este archivo es solo informativo - la configuración real se hace en GitHub UI
+
+# Para configurar en GitHub:
+# 1. Ve a Settings > Branches
+# 2. Añade una regla para 'main' con estas configuraciones:
+
+branch_protection:
+  main:
+    required_status_checks:
+      strict: true
+      contexts:
+        - 'Lint, Format & Build (18.x)'
+        - 'Lint, Format & Build (20.x)'
+        - 'Security Audit'
+    enforce_admins: true
+    required_pull_request_reviews:
+      required_approving_review_count: 1
+      dismiss_stale_reviews: true
+      require_code_owner_reviews: false
+    restrictions: null
+    allow_force_pushes: false
+    allow_deletions: false
+
+  # Configuración alternativa para desarrollo
+  develop:
+    required_status_checks:
+      strict: true
+      contexts:
+        - 'Lint, Format & Build (20.x)'
+    enforce_admins: false
+    required_pull_request_reviews:
+      required_approving_review_count: 0
+    allow_force_pushes: false
+    allow_deletions: false

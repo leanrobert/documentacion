@@ -1,0 +1,201 @@
+---
+title: Guías para Usuarios
+description: Documentación pública para usuarios del sistema
+tableOfContents: false
+head:
+  - tag: style
+    content: ':root { --sl-content-width: 100%; }'
+---
+
+### Tabla de Resolución Inmediata de Problemas
+
+---
+
+#### 📋 Cómo usar esta tabla
+
+Si tienes un problema:
+
+1. Busca el mensaje o situación en la columna "Situación/Mensaje"
+2. Lee la columna "Causa" para entender qué pasó
+3. Sigue los pasos de la columna "Acción Inmediata"
+4. Verifica en "Resultado Esperado" que funcionó
+
+---
+
+#### 🎯 Tabla de Decisiones - Validación ARCA
+
+| Situación/Mensaje                                           | Icono | Causa                             | Acción Inmediata                                                                                                                                          | Resultado Esperado                                     | ¿Permite Guardar?                 |
+| ----------------------------------------------------------- | ----- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------- |
+| "Validación exitosa con ARCA"                               | 🟢    | DNI/CUIT existe y está activo     | ✅ Continuar normalmente<br/>✅ Completar resto de campos                                                                                                 | Campos ARCA completados y bloqueados                   | ✅ SÍ                             |
+| "El Documento es inválido o no existe"                      | 🟡    | DNI no registrado en ARCA         | Verificar número con cliente<br/>Si es correcto, probar con CUIT<br/>Si es extranjero, cambiar a CI/Pasaporte                                             | Corrección del documento o cambio de tipo              | ❌ NO                             |
+| "El DNI tiene múltiples CUITs asociados"<br/>Lista de CUITs | 🟡    | Cliente con múltiples actividades | Anotar CUITs listados<br/>Preguntar al cliente cuál usa<br/>Cambiar tipo a CUIT<br/>Ingresar CUIT correcto<br/>Validar nuevamente                         | Validación exitosa con CUIT                            | ❌ NO (hasta validar con CUIT)    |
+| "El DNI existe pero no tiene CUIT asociado"                 | 🟡    | Consumidor final sin CUIT         | Campos personales se habilitan solos<br/>Completar Nombre, Apellido, Fecha Nac.<br/>Tipo Cliente → CF (automático)<br/>Tipo Persona → FISICA (automático) | Carga manual parcial completada                        | ✅ SÍ (tras completar personales) |
+| "El CUIT no existe o no es válido"                          | 🟡    | CUIT mal ingresado o inexistente  | Verificar número de CUIT con cliente<br/>Verificar formato XX-XXXXXXXX-X<br/>Pedir constancia de inscripción                                              | Corrección del CUIT                                    | ❌ NO                             |
+| "El CUIT está bloqueado/inactivo/cancelado"                 | 🟡    | Cliente con problemas fiscales    | Informar al cliente<br/>Cliente debe regularizar ante ARCA<br/>Crear Pre Venta mientras tanto                                                             | Cliente regulariza situación                           | ❌ NO                             |
+| "Error de comunicación con el servidor"                     | 🔴    | ARCA caído o problema de red      | **Opción A:** Esperar 10 min y reintentar<br/>**Opción B:** Click "Agregar datos manualmente"                                                             | Campos habilitados para carga manual (Si es necesario) | ⏰ Esperar o ✅ SÍ (carga manual) |
+| "Documento Extranjero Detectado"                            | 🔵    | CI Extranjera o Pasaporte         | Completar campos personales manualmente<br/>Verificar documento físico<br/>Tipo Cliente → CF y Tipo Persona Física (automático)                           | Carga manual para extranjero                           | ✅ SÍ (tras completar personales) |
+
+#### 🔄 Tabla de Decisiones - Validaciones de Campos
+
+| Situación/Mensaje                                    | Icono | Causa                                  | Acción Inmediata                                                                                             | Resultado Esperado        | ¿Permite Guardar? |
+| ---------------------------------------------------- | ----- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------- | ----------------- |
+| "El CUIT ingresado no es válido"                     | 🔴    | Dígito verificador incorrecto          | Verificar que los 11 dígitos estén correctos<br/>Pedir constancia al cliente<br/>Revisar guiones en formato  | Borde verde en campo CUIT | ❌ NO             |
+| "El cliente debe ser mayor de 18 años"               | 🔴    | Fecha de nacimiento < 18 años          | Verificar fecha con cliente<br/>Si es menor, no se puede dar de alta<br/>Esperar a que cumpla 18             | Cliente tiene 18+ años    | ❌ NO             |
+| "Los números de teléfono no pueden repetirse"        | 🔴    | Teléfonos duplicados                   | Borrar uno de los duplicados<br/>Ingresar teléfono alternativo<br/>Verificar todos los campos de teléfono    | Sin teléfonos repetidos   | ❌ NO             |
+| "Celular X no puede tener todos los dígitos iguales" | 🔴    | Teléfono con patrón inválido (1111...) | Solicitar teléfono real al cliente<br/>Corregir el campo                                                     | Teléfono válido ingresado | ❌ NO             |
+| "Los emails no pueden ser iguales"                   | 🔴    | Email 1 y Email 2 son idénticos        | Borrar Email 2 (es opcional)<br/>O ingresar email alternativo                                                | Sin emails duplicados     | ❌ NO             |
+| "Debe seleccionar un Barrio/Zona"                    | 🔴    | Campo Zona vacío                       | Ir a pestaña Dirección (se abre sola)<br/>Escribir barrio/zona en campo<br/>Seleccionar de lista desplegable | Zona seleccionada         | ❌ NO             |
+| "El apellido es requerido para personas físicas"     | 🔴    | Persona FISICA sin apellido            | Ingresar apellido del cliente<br/>Verificar que Tipo Persona sea FISICA                                      | Apellido completado       | ❌ NO             |
+
+#### ⚠️ Tabla de Decisiones - Combinaciones Inválidas
+
+| Mensaje de Error                                        | Campos Afectados                | Causa                     | Solución Rápida                                                          | ¿Permite Guardar? |
+| ------------------------------------------------------- | ------------------------------- | ------------------------- | ------------------------------------------------------------------------ | ----------------- |
+| "El documento DNI solo es válido para Personas Físicas" | Tipo Documento<br/>Tipo Persona | DNI + JURIDICA            | Cambiar Tipo Persona a FISICA<br/>O cambiar Tipo Documento a CUIT        | ❌ NO             |
+| "Consumidor Final no puede tener CUIT"                  | Tipo Cliente<br/>Tipo Documento | Consumidor Final + CUIT   | Cambiar Tipo Documento a DNI/LE/LC<br/>O cambiar Tipo Cliente            | ❌ NO             |
+| "IVA Inscripto requiere documento CUIT"                 | Tipo Cliente<br/>Tipo Documento | IVA Inscripto + DNI       | Cambiar Tipo Documento a CUIT<br/>O cambiar Tipo Cliente                 | ❌ NO             |
+| "Monotributista solo es válido para Personas Físicas"   | Tipo Cliente<br/>Tipo Persona   | Monotributista + JURIDICA | Cambiar Tipo Persona a FISICA<br/>O cambiar Tipo Cliente a IVA Inscripto | ❌ NO             |
+| "Monotributista requiere documento CUIT"                | Tipo Cliente<br/>Tipo Documento | Monotributista + DNI      | Cambiar Tipo Documento a CUIT                                            | ❌ NO             |
+
+#### 🎭 Tabla de Escenarios Completos
+
+##### Escenario 1: Cliente Residencial Nuevo (Caso Más Común)
+
+| Paso | Acción                  | Sistema Responde                       | Qué Hacer                  |
+| ---- | ----------------------- | -------------------------------------- | -------------------------- |
+| 1    | Seleccionar Tipo: DNI   | Campo Número se habilita               | Ingresar DNI               |
+| 2    | Click "Validar ARCA"    | 🟡 "DNI sin CUIT asociado"             | ✅ Esperado - Continuar    |
+| 3    | Sistema habilita campos | Nombre, Apellido, Fecha Nac. editables | Completar datos personales |
+| 4    | Tipo Cliente automático | "Consumidor Final"                     | ✅ Dejar como está         |
+| 5    | Tipo Persona automático | "FISICA"                               | ✅ Dejar como está         |
+| 6    | Completar resto         | Teléfonos, emails, dirección           | Llenar campos              |
+| 7    | Guardar                 | ✅ Cliente creado                      | ✅ Éxito                   |
+
+---
+
+##### Escenario 2: Cliente Empresa (IVA Inscripto)
+
+| Paso | Acción                 | Sistema Responde             | Qué Hacer                    |
+| ---- | ---------------------- | ---------------------------- | ---------------------------- |
+| 1    | Seleccionar Tipo: CUIT | Campo Número se habilita     | Ingresar CUIT                |
+| 2    | Click "Validar ARCA"   | 🟢 "Validación exitosa"      | ✅ Continuar                 |
+| 3    | Sistema puebla campos  | Todos campos ARCA completos  | Verificar datos              |
+| 4    | Tipo Cliente           | "IVA Inscripto"              | ✅ Verificar es correcto     |
+| 5    | Tipo Persona           | "JURIDICA"                   | ✅ Apellido se bloquea vacío |
+| 6    | Completar resto        | Teléfonos, emails, dirección | Llenar campos                |
+| 7    | Guardar                | ✅ Cliente creado            | ✅ Éxito                     |
+
+---
+
+##### Escenario 3: Cliente con Múltiples CUITs
+
+| Paso | Acción                | Sistema Responde             | Qué Hacer                |
+| ---- | --------------------- | ---------------------------- | ------------------------ |
+| 1    | Seleccionar Tipo: DNI | Campo Número se habilita     | Ingresar DNI             |
+| 2    | Click "Validar ARCA"  | 🟡 Lista de CUITs múltiples  | Anotar los CUITs         |
+| 3    | Preguntar al cliente  | Cliente indica cuál usar     | Anotar CUIT correcto     |
+| 4    | Cambiar Tipo: CUIT    | Campo Número se limpia       | Ingresar CUIT del paso 3 |
+| 5    | Click "Validar ARCA"  | 🟢 "Validación exitosa"      | ✅ Continuar             |
+| 6    | Completar resto       | Teléfonos, emails, dirección | Llenar campos            |
+| 7    | Guardar               | ✅ Cliente creado            | ✅ Éxito                 |
+
+---
+
+##### Escenario 4: Cliente Extranjero
+
+| Paso | Acción                      | Sistema Responde               | Qué Hacer             |
+| ---- | --------------------------- | ------------------------------ | --------------------- |
+| 1    | Seleccionar Tipo: Pasaporte | Campo Número se habilita       | Ingresar número       |
+| 2    | Click "Validar ARCA"        | 🔵 "Documento Extranjero"      | ✅ Esperado           |
+| 3    | Sistema habilita campos     | Campos personales editables    | Completar manualmente |
+| 4    | Verificar documento         | Solicitar ver documento físico | Copiar datos exactos  |
+| 5    | Tipo Cliente automático     | "Consumidor Final"             | ✅ Dejar como está    |
+| 6    | Tipo Persona automático     | "FISICA"                       | ✅ Dejar como está    |
+| 7    | Completar resto             | Teléfonos, emails, dirección   | Llenar campos         |
+| 8    | Guardar                     | ✅ Cliente creado              | ✅ Éxito              |
+
+---
+
+##### Escenario 5: Error de Servidor
+
+| Paso | Acción                     | Sistema Responde             | Qué Hacer                      |
+| ---- | -------------------------- | ---------------------------- | ------------------------------ |
+| 1    | Seleccionar Tipo: DNI/CUIT | Campo Número se habilita     | Ingresar número                |
+| 2    | Click "Validar ARCA"       | 🔴 "Error de comunicación"   | Decidir: esperar o manual      |
+| 3A   | **Opción A:** Esperar      | -                            | Esperar 10 minutos             |
+| 4A   | Recargar página (F5)       | Formulario limpio            | Volver a intentar desde paso 1 |
+| 3B   | **Opción B:** Manual       | Botón rojo "Agregar manual"  | Click en botón                 |
+| 4B   | Sistema habilita TODO      | Todos campos ARCA editables  | Completar con sumo cuidado     |
+| 5B   | Verificar documentación    | Pedir DNI/CUIT físico        | Copiar datos exactos           |
+| 6B   | Seleccionar manualmente    | Tipo Cliente, Tipo Persona   | Verificar con cliente          |
+| 7B   | Completar resto            | Teléfonos, emails, dirección | Llenar campos                  |
+| 8B   | Guardar                    | ✅ Cliente creado            | ✅ Éxito (con carga manual)    |
+
+#### 🎯 Tabla de Escenarios por Tipo de Cliente
+
+##### ✅ Cliente Residencial (Consumidor Final)
+
+```
+- □ Tipo Documento: DNI
+- □ Validar con ARCA
+- □ Si sale "sin CUIT": completar manualmente
+- □ Tipo Cliente: Consumidor Final
+- □ Tipo Persona: FISICA
+- □ Apellido obligatorio
+- □ Edad >18 años
+- □ Al menos 1 celular
+- □ Zona seleccionada
+- □ Resto campos obligatorios
+```
+
+##### ✅ Cliente Empresa (IVA Inscripto)
+
+```
+- □ Tipo Documento: CUIT
+- □ Validar con ARCA
+- □ Verificar validación exitosa
+- □ Tipo Cliente: IVA Inscripto
+- □ Tipo Persona: JURIDICA
+- □ Razón Social correcta
+- □ Apellido vacío (bloqueado)
+- □ Al menos 1 teléfono
+- □ Email comercial
+- □ Dirección fiscal
+- □ Resto campos obligatorios
+```
+
+##### ✅ Cliente Monotributista
+
+```
+- □ Tipo Documento: CUIT
+- □ Validar con ARCA
+- □ Verificar validación exitosa
+- □ Tipo Cliente: Monotributista
+- □ Tipo Persona: FISICA
+- □ Nombre y Apellido completos
+- □ Edad >18 años
+- □ Al menos 1 celular
+- □ Dirección completa
+- □ Resto campos obligatorios
+```
+
+##### ✅ Cliente Extranjero
+
+```
+- □ Tipo Documento: Pasaporte o CI Extranjera
+- □ Click en Validar (mensaje informativo)
+- □ Completar manualmente con documento físico si es posible
+- □ Tipo Cliente: Consumidor Final (auto)
+- □ Tipo Persona: FISICA (auto)
+- □ Verificar datos en documento físico si es posible
+- □ Al menos 1 teléfono local
+- □ Email de contacto
+- □ Dirección en Argentina
+- □ Resto campos obligatorios
+```
+
+---
+
+**Última actualización:** Octubre 2025  
+**Versión:** 2.0  
+**Uso:** Referencia rápida diaria para operadores

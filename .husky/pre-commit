@@ -1,0 +1,2 @@
+# Ejecutar lint-staged para validar archivos staged
+npx lint-staged

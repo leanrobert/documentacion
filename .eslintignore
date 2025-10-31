@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.astro/
+public/
+*.config.js
+!astro.config.mjs
+!src/content.config.ts
